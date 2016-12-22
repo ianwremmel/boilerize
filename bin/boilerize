@@ -1,7 +1,21 @@
 #!/usr/bin/env node
+
+// TODO need to think about how config is loaded based on cwd vs --dir
+
+const formatPackage = require(`../src/format-package`);
+const path = require(`path`);
 const pkg = require(`../package`);
-require(`yargs`)
+const argv = require(`yargs`)
+  .option(`dir`, {
+    alias: `d`,
+    desc: `Specify the directory to boil`,
+    default: process.cwd()
+  })
   .commandDir(`../src/cli`)
   .help()
   .version(pkg.version)
   .argv;
+
+if (!argv.command) {
+  formatPackage(path.join(argv.dir, `package.json`));
+}
