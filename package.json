@@ -21,6 +21,7 @@
   "homepage": "https://github.com/ianwremmel/boilerize#readme",
   "dependencies": {
     "js-yaml": "^3.7.0",
+    "nconf": "^0.8.4",
     "yargs": "^6.5.0"
   },
   "devDependencies": {

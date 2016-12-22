@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+const pkg = require(`../package`);
+require(`yargs`)
+  .commandDir(`../src/cli`)
+  .help()
+  .version(pkg.version)
+  .argv;
