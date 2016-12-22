@@ -1,5 +1,6 @@
 # boilerize _(@ianwremmel/boilerize)_
 TODO circleci
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/358c0c6589054477a3ca176182ff770d)](https://www.codacy.com/app/design_2/boilerize?utm_source=github.com&utm_medium=referral&utm_content=ianwremmel/boilerize&utm_campaign=badger)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 > boilerize applies common config to an existing JavaScript repo
