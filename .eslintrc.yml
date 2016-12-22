@@ -1,5 +1,5 @@
 extends:
-  - "./.eslintrc-es6.yml"
-  - "./.eslintrc-bin.yml"
+  - "@ianwremmel"
+  - "@ianwremmel/eslint-config/script"
 rules:
   require-jsdoc: 0
