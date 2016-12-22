@@ -1,0 +1,5 @@
+extends:
+  - "./.eslintrc-es6.yml"
+  - "./.eslintrc-bin.yml"
+rules:
+  require-jsdoc: 0

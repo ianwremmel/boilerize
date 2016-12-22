@@ -1,0 +1,29 @@
+{
+  "name": "boilerize",
+  "version": "1.0.0",
+  "description": "boilerize applies common config to an existing JavaScript repo",
+  "main": "index.js",
+  "bin": {
+    "boilerize": "bin/boilerize"
+  },
+  "scripts": {
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianwremmel/boilerize.git"
+  },
+  "author": "Ian W. Remmel <design@ianwremmel.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ianwremmel/boilerize/issues"
+  },
+  "homepage": "https://github.com/ianwremmel/boilerize#readme",
+  "dependencies": {
+    "js-yaml": "^3.7.0",
+    "yargs": "^6.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2"
+  }
+}
