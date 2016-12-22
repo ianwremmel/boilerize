@@ -1,0 +1,12 @@
+rules:
+  no-console:
+    - 0
+  # eslint doesn't seem to understand async IIFEs
+  no-extra-parens:
+    - 0
+  no-process-exit:
+    - 0
+  global-require:
+    - 0
+  no-sync:
+    - 0
