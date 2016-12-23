@@ -36,7 +36,7 @@ npm install -g @ianwremmel/boilerize
 ## Usage
 
 ```bash
-@ianwremmel/boilerize --help
+boilerize --help
 ```
 
 ## Contribute

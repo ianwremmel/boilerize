@@ -7,7 +7,7 @@
     "sections": {
       "Long Description": "Use `boilerize` to\n- sort your `package.json`\n- apply default values to your package.json\n- format your readmes according to [`standard-readme`](https://github.com/RichardLitt/standard-readme)",
       "Install": "```bash\nnpm install -g <%= pkg.name %>\n```",
-      "Usage": "```bash\n<%= pkg.name %> --help\n```"
+      "Usage": "```bash\nboilerize --help\n```"
     }
   }
 }
