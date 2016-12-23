@@ -59,7 +59,9 @@ function toOrder() {
 
   // Add end sections
   order = config.get(`format-readme:order:end`).reduce((acc, key) => {
-    acc.push(key);
+    if (key in handlers || key in config.get(`format-readme:sections`)) {
+      acc.push(key);
+    }
     return acc;
   }, order);
 

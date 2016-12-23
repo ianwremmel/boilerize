@@ -22,7 +22,6 @@ Use `boilerize` to
 - [Table of Contents](#table-of-contents)
 - [Install](#install)
 - [Usage](#usage)
-- [API](#a-p-i)
 - [Contribute](#contribute)
 - [License](#license)
 
