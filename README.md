@@ -15,11 +15,7 @@ Use `boilerize` to
 - format your readmes according to [`standard-readme`](https://github.com/RichardLitt/standard-readme)
 
 ## Table of Contents
-- [Title](#title)
-- [Badges](#badges)
-- [Short Description](#short-description)
-- [Long Description](#long-description)
-- [Table of Contents](#table-of-contents)
+
 - [Install](#install)
 - [Usage](#usage)
 - [Contribute](#contribute)

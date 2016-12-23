@@ -30,10 +30,16 @@ const handlers = {
     return ``;
   },
   'Table of Contents'() {
+    let start = false;
     return toOrder().reduce((acc, key) => {
-      acc += `- [${key}](#${S(key).dasherize().chompLeft(`-`).s})\n`;
+      if (start) {
+        acc += `- [${key}](#${S(key).dasherize().chompLeft(`-`).s})\n`;
+      }
+      if (key === `Table of Contents`) {
+        start = true;
+      }
       return acc;
-    }, `\n## Table of Contents\n`);
+    }, `\n## Table of Contents\n\n`);
   }
 };
 
