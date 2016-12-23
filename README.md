@@ -8,12 +8,13 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](LICENSE)
 
 > boilerize applies common config to an existing JavaScript repo
+
 Use `boilerize` to
 - sort your `package.json`
 - apply default values to your package.json
 - format your readmes according to [`standard-readme`](https://github.com/RichardLitt/standard-readme)
 
- ## Table of Contents
+## Table of Contents
 - [Title](#title)
 - [Badges](#badges)
 - [Short Description](#short-description)

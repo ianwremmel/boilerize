@@ -33,7 +33,7 @@ const handlers = {
     return toOrder().reduce((acc, key) => {
       acc += `- [${key}](#${S(key).dasherize().chompLeft(`-`).s})\n`;
       return acc;
-    }, `\n ## Table of Contents\n`);
+    }, `\n## Table of Contents\n`);
   }
 };
 
