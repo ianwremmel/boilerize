@@ -20,7 +20,7 @@ const handlers = {
     }, `\n`);
   },
   'Short Description'() {
-    return `> ${config.get(`pkg:description`)}`;
+    return `> ${config.get(`pkg:description`)}\n`;
   },
   'Long Description'() {
     const ld = config.get(`format-readme:sections:Long Description`);
