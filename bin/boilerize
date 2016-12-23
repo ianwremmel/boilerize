@@ -1,13 +1,16 @@
 #!/usr/bin/env node
 
+require(`babel-register`);
+
 // TODO need to think about how config is loaded based on cwd vs --dir
 
-const formatPackage = require(`../src/format-package`);
-const path = require(`path`);
 const pkg = require(`../package`);
-const argv = require(`yargs`)
+const yargs = require(`yargs`);
+
+const argv = yargs
   .fail((msg, error) => {
-    console.error(error.stack);
+    process.stderr.write(error.stack);
+    process.stderr.write(`\n`);
   })
   .option(`dir`, {
     alias: `d`,
@@ -19,3 +22,7 @@ const argv = require(`yargs`)
   .help()
   .version(pkg.version)
   .argv;
+
+if (!argv.command) {
+  yargs.showHelp();
+}

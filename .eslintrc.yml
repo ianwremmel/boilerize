@@ -1,5 +1,4 @@
 extends:
-  - "@ianwremmel"
-  - "@ianwremmel/eslint-config/script"
+  - "@ianwremmel/eslint-config/es2015-imports"
 rules:
   require-jsdoc: 0
