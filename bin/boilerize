@@ -6,16 +6,16 @@ const formatPackage = require(`../src/format-package`);
 const path = require(`path`);
 const pkg = require(`../package`);
 const argv = require(`yargs`)
+  .fail((msg, error) => {
+    console.error(error.stack);
+  })
   .option(`dir`, {
     alias: `d`,
     desc: `Specify the directory to boil`,
-    default: process.cwd()
+    default: process.cwd(),
+    global: true
   })
   .commandDir(`../src/cli`)
   .help()
   .version(pkg.version)
   .argv;
-
-if (!argv.command) {
-  formatPackage(path.join(argv.dir, `package.json`));
-}

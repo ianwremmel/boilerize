@@ -1,5 +1,6 @@
 {
-  "name": "boilerize",
+  "name": "@ianwremmel/boilerize",
+  "title": "boilerize",
   "version": "1.0.0",
   "description": "boilerize applies common config to an existing JavaScript repo",
   "main": "index.js",
@@ -23,6 +24,7 @@
     "js-yaml": "^3.7.0",
     "nconf": "^0.8.4",
     "require-dir": "^0.3.1",
+    "string": "^3.3.3",
     "yargs": "^6.5.0"
   },
   "devDependencies": {
