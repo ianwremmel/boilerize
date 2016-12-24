@@ -5,6 +5,13 @@ import {install} from './npm';
 
 let needed = false;
 
+export default async function setupPackage(options, config) {
+  config.pkg[`pre-commit`] = `lint:staged`;
+
+  await addScript(options, `lint:staged`, `lint-staged`, config.pkg);
+  config.pkg[`lint-staged`] = {};
+}
+
 export function addDevDependency(dependency, pkg) {
   if (!dependency) {
     throw new Error(`dependency is required`);

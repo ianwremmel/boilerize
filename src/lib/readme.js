@@ -4,6 +4,11 @@ import {get, has, template} from 'lodash/fp';
 import {writeFile} from 'fs-promise';
 import S from 'string';
 
+export default async function setupReadme({readmePath}, config) {
+  const readme = await format(config);
+  await save(readmePath, readme);
+}
+
 const handlers = {
   Title(config) {
     if (get(`pkg.title`, config)) {
