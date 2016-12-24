@@ -7,7 +7,7 @@ import {
 import {
   isString,
   uniq
-} from 'lodash';
+} from 'lodash/fp';
 
 export async function save(configPath, config) {
   await writeFile(configPath, jsyaml.safeDump(config));

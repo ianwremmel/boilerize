@@ -1,13 +1,15 @@
-import {difference, uniq} from 'lodash';
+import {difference, get, uniq} from 'lodash/fp';
 import {writeFile} from 'fs-promise';
 import {exec} from 'child_process';
 import {install} from './npm';
 
-const config = require(`../config`);
-
 let needed = false;
 
 export function addDevDependency(dependency, pkg) {
+  if (!dependency) {
+    throw new Error(`dependency is required`);
+  }
+
   if (pkg.devDependencies[dependency]) {
     return Promise.resolve();
   }
@@ -74,17 +76,17 @@ export async function save(filename, pkg) {
   return await writeFile(filename, `${JSON.stringify(pkg, null, 2)}\n`);
 }
 
-export function format(pkg) {
-  let result = Object.assign({}, config.get(`format-package:defaults`), pkg, config.get(`format-package:overrides`));
-  result = config.get(`format-package:order`).reduce(sorter, {});
+export function format(config) {
+  let result = Object.assign({}, get(`format-package.defaults`, config), config.pkg, get(`format-package.overrides`, config));
+  result = get(`format-package.order`, config).reduce(sorter, {});
 
-  const unknownKeys = difference(Object.keys(pkg), config.get(`format-package:order`));
+  const unknownKeys = difference(Object.keys(config.pkg), get(`format-package.order`, config)).sort();
   result = unknownKeys.reduce(sorter, result);
 
   return result;
 
   function sorter(acc, key) {
-    acc[key] = pkg[key];
+    acc[key] = config.pkg[key];
     return acc;
   }
 }

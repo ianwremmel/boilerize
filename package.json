@@ -28,10 +28,9 @@
     "babel-register": "^6.18.0",
     "fs-promise": "^1.0.0",
     "js-yaml": "^3.7.0",
-    "nconf": "^0.8.4",
+    "rc": "^1.1.6",
     "require-dir": "^0.3.1",
-    "string": "^3.3.3",
-    "yargs": "^6.5.0"
+    "string": "^3.3.3"
   },
   "devDependencies": {
     "@ianwremmel/eslint-config": "^1.1.0",
@@ -44,9 +43,9 @@
     "pre-commit": "^1.2.2",
     "lint-staged": "^3.2.4"
   },
-  "title": "boilerize",
-  "pre-commit": "lint:staged",
   "lint-staged": {
     "*.js": "lint:eslint"
-  }
+  },
+  "pre-commit": "lint:staged",
+  "title": "boilerize"
 }
