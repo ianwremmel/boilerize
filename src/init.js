@@ -1,5 +1,3 @@
-import config from './config';
-
 import path from 'path';
 import {
   exists,
@@ -24,6 +22,8 @@ import {
   load,
   save
 } from './lib/package';
+
+const config = require(`./config`);
 
 export default async function init(options) {
   options = Object.assign({

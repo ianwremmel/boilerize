@@ -1,7 +1,7 @@
-const formatReadme = require(`../format-readme`);
-const path = require(`path`);
+import formatReadme from '../format-readme';
+import path from 'path';
 import handleError from '../lib/handle-error';
 
-exports.command = `format-readme`;
-exports.desc = `Apply standard rules to README.md`;
-exports.handler = handleError((argv) => formatReadme(path.join(argv.dir, `README.md`), require(path.join(argv.dir, `package.json`))));
+export const command = `format-readme`;
+export const desc = `Apply standard rules to README.md`;
+export const handler = handleError((argv) => formatReadme(path.join(argv.dir, `README.md`), require(path.join(argv.dir, `package.json`))));

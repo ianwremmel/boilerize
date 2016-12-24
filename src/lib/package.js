@@ -1,7 +1,8 @@
 import {difference, uniq} from 'lodash';
 import {writeFile} from 'fs-promise';
 import {exec} from 'child_process';
-import config from '../config';
+
+const config = require(`../config`);
 
 export function addDevDependency(dependency, pkg) {
   return new Promise((resolve, reject) => {

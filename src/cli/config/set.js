@@ -1,9 +1,10 @@
-const config = require(`../../config`);
 import handleError from '../../lib/handle-error';
 
-exports.command = `set <key> <value>`;
-exports.desc = `Sets a config key`;
-exports.handler = handleError((argv) => {
+const config = require(`../../config`);
+
+export const command = `set <key> <value>`;
+export const desc = `Sets a config key`;
+export const handler = handleError((argv) => {
   config.set(argv.key, argv.value);
   return config.save();
 });

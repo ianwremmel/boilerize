@@ -1,9 +1,10 @@
 /* eslint no-continue: 0 */
 
-const _ = require(`lodash/fp`);
+import _ from 'lodash/fp';
+import {writeFile} from 'fs-promise';
+import S from 'string';
+
 const config = require(`./config`);
-const fs = require(`fs`);
-const S = require(`string`);
 
 const handlers = {
   Title() {
@@ -74,7 +75,7 @@ function toOrder() {
   return order;
 }
 
-module.exports = function formatReadme(readmePath, pkg) {
+export default async function formatReadme(readmePath, pkg) {
   config.add(`pkg`, {type: `literal`, store: {pkg}});
   config.required([
     `github:org`,
@@ -113,5 +114,5 @@ module.exports = function formatReadme(readmePath, pkg) {
     return acc;
   }, ``);
 
-  fs.writeFileSync(readmePath, out);
-};
+  await writeFile(readmePath, out);
+}
