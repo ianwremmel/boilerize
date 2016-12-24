@@ -1,7 +1,7 @@
+import handleError from '../../lib/handle-error';
+
 const config = require(`../../config`);
 
-exports.command = `delete <key>`;
-exports.desc = `Deletes a config key`;
-exports.handler = (argv) => {
-  config.set(argv.key, null);
-};
+export const command = `delete <key>`;
+export const desc = `Deletes a config key`;
+export const handler = handleError((argv) => config.set(argv.key, null));

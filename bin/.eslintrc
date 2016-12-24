@@ -1,0 +1,4 @@
+extends:
+  - "@ianwremmel"
+  - "@ianwremmel/eslint-config/script"
+root: true

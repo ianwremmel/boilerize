@@ -1,7 +1,9 @@
+import handleError from '../../lib/handle-error';
+
 const config = require(`../../config`);
 
-exports.command = `get [key]`;
-exports.desc = `prints the config at \`key\`. If \`key\` is not set, prints all config`;
-exports.handler = (argv) => {
+export const command = `get [key]`;
+export const desc = `prints the config at \`key\`. If \`key\` is not set, prints all config`;
+export const handler = handleError((argv) => {
   console.log(config.get(argv.key));
-};
+});
