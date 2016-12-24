@@ -1,11 +1,20 @@
 {
   "name": "@ianwremmel/boilerize",
-  "title": "boilerize",
   "version": "1.0.0",
   "description": "boilerize applies common config to an existing JavaScript repo",
+  "homepage": "https://github.com/ianwremmel/boilerize#readme",
+  "bugs": {
+    "url": "https://github.com/ianwremmel/boilerize/issues"
+  },
+  "license": "MIT",
+  "author": "Ian W. Remmel <design@ianwremmel.com>",
   "main": "index.js",
   "bin": {
     "boilerize": "bin/boilerize"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianwremmel/boilerize.git"
   },
   "scripts": {
     "test": "eslint .",
@@ -14,16 +23,6 @@
     "lint:js": "npm run --silent lint:eslint -- .",
     "lint": "npm run --silent lint:js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ianwremmel/boilerize.git"
-  },
-  "author": "Ian W. Remmel <design@ianwremmel.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ianwremmel/boilerize/issues"
-  },
-  "homepage": "https://github.com/ianwremmel/boilerize#readme",
   "dependencies": {
     "babel-preset-env": "^1.1.4",
     "babel-register": "^6.18.0",
@@ -45,6 +44,7 @@
     "pre-commit": "^1.2.2",
     "lint-staged": "^3.2.4"
   },
+  "title": "boilerize",
   "pre-commit": "lint:staged",
   "lint-staged": {
     "*.js": "lint:eslint"

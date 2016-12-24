@@ -1,4 +1,5 @@
 import config from './config';
+
 import path from 'path';
 import {
   exists,
@@ -19,21 +20,35 @@ import {
   addDevDependency,
   addScript,
   combineScripts,
+  format,
   load,
   save
 } from './lib/package';
 
 export default async function init(options) {
-  const packagePath = path.join(options.dir, `package.json`);
-  const eslintPath = path.join(options.dir, `.eslintrc.yml`);
-  const editorConfigPath = path.join(options.dir, `.editorconfig`);
+  options = Object.assign({
+    packagePath: path.join(options.dir, `package.json`),
+    eslintPath: path.join(options.dir, `.eslintrc.yml`),
+    editorConfigPath: path.join(options.dir, `.editorconfig`)
+  }, options);
 
-  const pkg = await load(packagePath);
-  await addScript(options, `lint:staged`, `lint-staged`, pkg);
-  pkg[`pre-commit`] = `lint:staged`;
-  pkg[`lint-staged`] = {};
+  let pkg = await load(options.packagePath);
 
+  pkg = await configureLintStaged(options, pkg);
+  pkg = await configureEditorConfig(options, pkg);
+  pkg = await configurePrecommit(options, pkg);
+  pkg = await configureEslint(options, pkg);
+  pkg = await configureStylelint(options, pkg);
+  pkg = format(pkg);
+
+  await save(options.packagePath, pkg);
+
+  await install();
+};
+
+async function configureEslint(options, pkg) {
   if (config.get(`project:js`)) {
+    const {eslintPath} = options;
     await addDevDependency(`pre-commit`, pkg);
     await addDevDependency(`lint-staged`, pkg);
     await addDevDependency(`eslint`, pkg);
@@ -64,7 +79,10 @@ export default async function init(options) {
     }
     await eslintSave(eslintPath, eslintConfig);
   }
+  return pkg;
+}
 
+async function configureStylelint(options, pkg) {
   if (config.get(`project:css`)) {
     await addDevDependency(`pre-commit`, pkg);
     await addDevDependency(`lint-staged`, pkg);
@@ -73,12 +91,23 @@ export default async function init(options) {
 
     pkg[`lint-staged`][`*.js`] = `lint:css`;
   }
+  return pkg;
+}
 
-  await save(packagePath, pkg);
+async function configurePrecommit(options, pkg) {
+  pkg[`pre-commit`] = `lint:staged`;
+  return pkg;
+}
 
-  await install();
+async function configureLintStaged(options, pkg) {
+  await addScript(options, `lint:staged`, `lint-staged`, pkg);
+  pkg[`lint-staged`] = {};
+  return pkg;
+}
 
+async function configureEditorConfig({editorConfigPath}, pkg) {
   if (!await exists(editorConfigPath)) {
     await writeFile(editorConfigPath, config.get(`project:editor-config`));
   }
-};
+  return pkg;
+}

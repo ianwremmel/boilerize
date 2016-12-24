@@ -1,6 +1,7 @@
-import {uniq} from 'lodash';
+import {difference, uniq} from 'lodash';
 import {writeFile} from 'fs-promise';
 import {exec} from 'child_process';
+import config from '../config';
 
 export function addDevDependency(dependency, pkg) {
   return new Promise((resolve, reject) => {
@@ -63,4 +64,19 @@ export async function load(filename) {
 
 export async function save(filename, pkg) {
   return await writeFile(filename, `${JSON.stringify(pkg, null, 2)}\n`);
+}
+
+export function format(pkg) {
+  let result = Object.assign({}, config.get(`format-package:defaults`), pkg, config.get(`format-package:overrides`));
+  result = config.get(`format-package:order`).reduce(sorter, {});
+
+  const unknownKeys = difference(Object.keys(pkg), config.get(`format-package:order`));
+  result = unknownKeys.reduce(sorter, result);
+
+  return result;
+
+  function sorter(acc, key) {
+    acc[key] = pkg[key];
+    return acc;
+  }
 }
