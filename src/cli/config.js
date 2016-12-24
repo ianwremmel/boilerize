@@ -1,5 +1,6 @@
-const config = require(`../config`);
-const y = require(`yargs`);
+import config from '../config';
+import handleError from '../lib/handle-error';
+import y from 'yargs';
 
 exports.command = `config [command]`;
 exports.desc = `Interact with local and global config files`;
@@ -10,7 +11,7 @@ exports.builder = (yargs) => yargs
     type: `boolean`
   })
   .commandDir(`./config`);
-exports.handler = (argv) => {
+exports.handler = handleError((argv) => {
   if (argv.global) {
     config.remove(`local`);
   }
@@ -18,4 +19,4 @@ exports.handler = (argv) => {
   if (!argv.command) {
     y.showHelp();
   }
-};
+});

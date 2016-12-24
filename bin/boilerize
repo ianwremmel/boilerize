@@ -9,8 +9,7 @@ const yargs = require(`yargs`);
 
 const argv = yargs
   .fail((msg, error) => {
-    process.stderr.write(error.stack);
-    process.stderr.write(`\n`);
+    console.error(error.stack);
   })
   .option(`dir`, {
     alias: `d`,
@@ -22,7 +21,3 @@ const argv = yargs
   .help()
   .version(pkg.version)
   .argv;
-
-if (!argv.command) {
-  yargs.showHelp();
-}

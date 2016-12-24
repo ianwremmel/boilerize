@@ -9,5 +9,10 @@
       "Install": "```bash\nnpm install -g <%= pkg.name %>\n```",
       "Usage": "```bash\nboilerize --help\n```"
     }
+  },
+  "project": {
+    "eslint": {
+      "imports": "true"
+    }
   }
 }
