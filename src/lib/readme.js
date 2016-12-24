@@ -1,12 +1,19 @@
 /* eslint no-continue: 0 */
-
+import {
+  load as loader,
+  save as saver
+} from './fs';
 import {get, has, template} from 'lodash/fp';
-import {writeFile} from 'fs-promise';
 import S from 'string';
 
-export default async function setupReadme({readmePath}, config) {
+const FILENAME = `README.md`;
+
+export const load = loader(FILENAME);
+export const save = saver(FILENAME);
+
+export default async function setupReadme(options, config) {
   const readme = await format(config);
-  await save(readmePath, readme);
+  await save(readme);
 }
 
 const handlers = {
@@ -76,10 +83,6 @@ function toOrder(config) {
   }, order);
 
   return order;
-}
-
-export async function save(outPath, readme) {
-  await writeFile(outPath, readme);
 }
 
 export async function format(config) {

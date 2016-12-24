@@ -1,7 +1,15 @@
-import {difference, get, uniq} from 'lodash/fp';
-import {writeFile} from 'fs-promise';
 import {exec} from 'child_process';
+import {
+  load as loader,
+  save as saver
+} from './fs';
+import {difference, get, uniq} from 'lodash/fp';
 import {install} from './npm';
+
+const FILENAME = `package.json`;
+
+export const load = loader(FILENAME);
+export const save = saver(FILENAME);
 
 let needed = false;
 
@@ -72,15 +80,6 @@ export function combineScripts(options, name, script, pkg) {
     .join(` && `);
 
   return pkg;
-}
-
-export async function load(filename) {
-  // eslint-disable-next-line global-require
-  return require(filename);
-}
-
-export async function save(filename, pkg) {
-  return await writeFile(filename, `${JSON.stringify(pkg, null, 2)}\n`);
 }
 
 export function format(config) {

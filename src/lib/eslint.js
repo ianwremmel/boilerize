@@ -1,24 +1,25 @@
-import jsyaml from 'js-yaml';
-import {
-  readFile,
-  writeFile
-} from 'fs-promise';
-
 import {
   get,
   isString,
   uniq
 } from 'lodash/fp';
-
+import {
+  load as loader,
+  save as saver
+} from './fs';
 import {
   addDevDependency,
   addScript,
   combineScripts
 } from './package';
 
+const FILENAME = `.eslintrc.yml`;
+
+export const load = loader(FILENAME);
+export const save = saver(FILENAME);
+
 export default async function setupEslint(options, config) {
   if (get(`project.js`, config)) {
-    const {eslintPath} = options;
     await addDevDependency(`pre-commit`, config.pkg);
     await addDevDependency(`lint-staged`, config.pkg);
     await addDevDependency(`eslint`, config.pkg);
@@ -32,7 +33,7 @@ export default async function setupEslint(options, config) {
 
     let eslintConfig;
     try {
-      eslintConfig = await load(eslintPath);
+      eslintConfig = await load();
     }
     catch (err) {
       eslintConfig = {};
@@ -47,16 +48,8 @@ export default async function setupEslint(options, config) {
     if (get(`project.react`, config)) {
       extend(`@ianwremmel/eslint-config/react`, eslintConfig);
     }
-    await save(eslintPath, eslintConfig);
+    await save(eslintConfig);
   }
-}
-
-export async function save(configPath, config) {
-  await writeFile(configPath, jsyaml.safeDump(config));
-}
-
-export async function load(configPath) {
-  return jsyaml.safeLoad(await readFile(configPath));
 }
 
 export function extend(rule, options, config) {
