@@ -1,10 +1,17 @@
 import {difference, uniq} from 'lodash';
 import {writeFile} from 'fs-promise';
 import {exec} from 'child_process';
+import {install} from './npm';
 
 const config = require(`../config`);
 
+let needed = false;
+
 export function addDevDependency(dependency, pkg) {
+  if (pkg.devDependencies[dependency]) {
+    return Promise.resolve();
+  }
+  needed = true;
   return new Promise((resolve, reject) => {
     exec(`npm view ${dependency}@latest version`, (err, stdout) => {
       if (err) {
@@ -79,5 +86,11 @@ export function format(pkg) {
   function sorter(acc, key) {
     acc[key] = pkg[key];
     return acc;
+  }
+}
+
+export async function installIfNeeded() {
+  if (needed) {
+    await install();
   }
 }

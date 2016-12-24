@@ -11,14 +11,11 @@ import {
 } from './lib/eslint';
 
 import {
-  install
-} from './lib/npm';
-
-import {
   addDevDependency,
   addScript,
   combineScripts,
   format,
+  installIfNeeded,
   load,
   save
 } from './lib/package';
@@ -43,7 +40,7 @@ export default async function init(options) {
 
   await save(options.packagePath, pkg);
 
-  await install();
+  await installIfNeeded();
 };
 
 async function configureEslint(options, pkg) {
