@@ -2,7 +2,7 @@
 
 [![CircleCI](https://img.shields.io/circleci/project/github/ianwremmel/boilerize.svg?style=flat-square)](https://circleci.com/gh/ianwremmel/boilerize)
 [![Codacy grade](https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg?style=flat-square)](https://www.codacy.com/app/design_2/eslint-config?utm_source=github.com&utm_medium=referral&utm_content=ianwremmel/boilerize&utm_campaign=badger)
-[![npm (scoped)](https://img.shields.io/npm/v/<$= pkg.name %>.svg?style=flat-square)](https://www.npmjs.com/package/@ianwremmel/boilerize)
+[![npm (scoped)](https://img.shields.io/npm/v/@ianwremmel/boilerize.svg?style=flat-square)](https://www.npmjs.com/package/@ianwremmel/boilerize)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](LICENSE)

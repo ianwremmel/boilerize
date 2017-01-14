@@ -1,7 +1,7 @@
 import {spawn} from 'child_process';
 
 export async function install() {
-  console.log(`init: installing new packages`);
+  console.info(`init: installing new packages`);
 
   await new Promise((resolve, reject) => {
     const child = spawn(`npm`, [`install`], {stdio: `inherit`});
@@ -16,5 +16,5 @@ export async function install() {
     });
   });
 
-  console.log(`init: done installing new packages`);
+  console.info(`init: done installing new packages`);
 }

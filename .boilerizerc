@@ -13,6 +13,8 @@
   "project": {
     "eslint": {
       "imports": "true"
-    }
+    },
+    "js": true,
+    "react": false
   }
 }

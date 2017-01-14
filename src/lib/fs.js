@@ -18,18 +18,23 @@ export function exists(filename) {
 export function load(filename) {
   return async function curriedLoad() {
     const filePath = resolve(process.cwd(), filename);
-    const raw = await readFile(filePath, `utf8`);
     try {
-      return JSON.parse(raw);
+      const raw = await readFile(filePath, `utf8`);
+      try {
+        return JSON.parse(raw);
+      }
+      catch (err) {
+        try {
+          return jsyaml.safeLoad(raw);
+        }
+        catch (err2) {
+          console.warn(`Failed to parse ${filePath} as JSON or YAML. Did you mean to use fs.readFile?`);
+          return raw;
+        }
+      }
     }
     catch (err) {
-      try {
-        return jsyaml.safeLoad(raw);
-      }
-      catch (err2) {
-        console.warn(`Failed to parse ${filePath} as JSON or YAML. Did you mean to use fs.readFile?`);
-        return raw;
-      }
+      return {};
     }
   };
 }

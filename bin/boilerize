@@ -3,6 +3,7 @@
 /* eslint quotes: [2, single] */
 
 require('babel-register');
+
 const boilerize = require('../src/boilerize').default;
 
 boilerize()

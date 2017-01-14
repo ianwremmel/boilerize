@@ -1,45 +1,56 @@
-import {get} from 'lodash/fp';
+import Config from './lib/config';
+import Circle from './lib/config-files/circle';
+import EditorConfig from './lib/config-files/editorconfig';
+import ESLint from './lib/config-files/eslint';
+import Package from './lib/config-files/package';
+import Readme from './lib/config-files/readme';
 
-import setupEslint from './lib/eslint';
+import inquirer from 'inquirer';
 
-import setupPackage, {
-  addDevDependency,
-  combineScripts,
-  format,
-  installIfNeeded,
-  load as loadPackage,
-  save as savePackage
-} from './lib/package';
-import setupReadme from './lib/readme';
-import setupEditorConfig from './lib/editorconfig';
 import rc from 'rc';
 import requireDir from 'require-dir';
 
-export default async function init(options) {
-  let pkg = await loadPackage();
+export default async function init() {
+  const config = new Config(rc(`boilerize`, Object.assign({}, requireDir(`../config`))));
 
-  const config = rc(`boilerize`, Object.assign({pkg}, requireDir(`../config`)));
+  const pkg = new Package(config);
+  const circle = new Circle(config, {package: pkg});
+  const editorconfig = new EditorConfig(config, {package: pkg});
+  const eslint = new ESLint(config, {package: pkg});
+  const readme = new Readme(config, {package: pkg});
 
-  await setupPackage(options, config);
-  await setupEditorConfig(options, config);
-  await setupEslint(options, config);
-  await configureStylelint(options, config);
-  pkg = format(config);
+  await Promise.all([
+    circle.load(),
+    editorconfig.load(),
+    eslint.load(),
+    pkg.load(),
+    readme.load()
+  ]);
 
-  await savePackage(pkg);
+  const prompt = circle.prompt()
+    .concat(editorconfig.prompt())
+    .concat(eslint.prompt())
+    .concat(pkg.prompt())
+    .concat(readme.prompt());
 
-  await setupReadme(options, config);
+  const answers = await inquirer.prompt(prompt);
+  config.merge(answers);
 
-  await installIfNeeded();
-}
+  await config.save();
 
-async function configureStylelint(options, config) {
-  if (get(`project.css`, config)) {
-    await addDevDependency(`pre-commit`, config.pkg);
-    await addDevDependency(`lint-staged`, config.pkg);
+  await pkg.setup();
+  await circle.setup();
+  await editorconfig.setup();
+  await eslint.setup();
+  await readme.setup();
 
-    await combineScripts(options, `lint`, `lint:css`, config.pkg);
+  await Promise.all([
+    circle.save(),
+    editorconfig.save(),
+    eslint.save(),
+    pkg.save(),
+    readme.save()
+  ]);
 
-    config.pkg[`lint-staged`][`*.js`] = `lint:css`;
-  }
+  await pkg.installIfNeeded();
 }
