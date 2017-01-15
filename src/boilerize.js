@@ -13,11 +13,19 @@ import requireDir from 'require-dir';
 export default async function init() {
   const config = new Config(rc(`boilerize`, Object.assign({}, requireDir(`../config`))));
 
-  const pkg = new Package(config);
-  const circle = new Circle(config, {package: pkg});
-  const editorconfig = new EditorConfig(config, {package: pkg});
-  const eslint = new ESLint(config, {package: pkg});
-  const readme = new Readme(config, {package: pkg});
+  const secrets = new Secrets();
+  const g = {
+    services: {}
+  };
+
+  g.services.circle = new CircleService(config, g);
+  g.services.github = new GithubService(config, g);
+  g.services.npm = new NpmService(config, g);
+  g.config.package = new Package(config, g);
+  g.config.circle = new CircleConfig(config, g);
+  g.config.editorconfig = new EditorConfig(config, g);
+  g.config.eslint = new ESLintConfig(config, g);
+  g.config.readme = new ReadmeConfig(config, g);
 
   await Promise.all([
     circle.load(),
@@ -26,12 +34,6 @@ export default async function init() {
     pkg.load(),
     readme.load()
   ]);
-
-  const prompt = circle.prompt()
-    .concat(editorconfig.prompt())
-    .concat(eslint.prompt())
-    .concat(pkg.prompt())
-    .concat(readme.prompt());
 
   const answers = await inquirer.prompt(prompt);
   config.merge(answers);

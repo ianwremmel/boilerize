@@ -1,3 +1,4 @@
+import inquirer from 'inquirer';
 import {isString, uniq} from 'lodash/fp';
 import ConfigFile from '../config-file';
 import {override} from 'core-decorators';
@@ -27,6 +28,8 @@ export default class ESLint extends ConfigFile {
 
   @override
   async setup() {
+    await inquirer.prompt(this.prompt());
+
     if (!this.config.get(`project.js`)) {
       return;
     }
