@@ -1,11 +1,13 @@
+import {override} from 'core-decorators';
 import inquirer from 'inquirer';
 import {isString, uniq} from 'lodash/fp';
 import ConfigFile from '../lib/config-file';
-import {override} from 'core-decorators';
+import log from '../lib/decorators/log';
 
 export default class ESLint extends ConfigFile {
   static FILENAME = `.eslintrc.yml`;
 
+  @log()
   extend(options, rule) {
     if (options.exclusive) {
       this.data.extends = rule;
@@ -27,23 +29,24 @@ export default class ESLint extends ConfigFile {
   }
 
   @override
+  @log()
   async setup() {
-    await inquirer.prompt(this.prompt());
+    await inquirer.prompt(this.prompts());
 
     if (!this.config.get(`project.js`)) {
       return;
     }
 
-    await this.package.addDevDependency(`pre-commit`);
-    await this.package.addDevDependency(`lint-staged`);
-    await this.package.addDevDependency(`eslint`);
-    await this.package.addDevDependency(`@ianwremmel/eslint-config`);
+    await this.g.config.package.addDevDependency(`pre-commit`);
+    await this.g.config.package.addDevDependency(`lint-staged`);
+    await this.g.config.package.addDevDependency(`eslint`);
+    await this.g.config.package.addDevDependency(`@ianwremmel/eslint-config`);
 
-    await this.package.addScript(`lint:eslint`, `eslint --ignore-path .gitignore`);
-    await this.package.addScript(`lint:js`, `npm run --silent lint:eslint -- .`);
-    await this.package.combineScripts(`lint`, `lint:js`);
+    await this.g.config.package.addScript(`lint:eslint`, `eslint --ignore-path .gitignore`);
+    await this.g.config.package.addScript(`lint:js`, `npm run --silent lint:eslint -- .`);
+    await this.g.config.package.combineScripts(`lint`, `lint:js`);
 
-    this.package.set([`lint-staged`, `*.js`], `lint:eslint`);
+    this.g.config.package.set([`lint-staged`, `*.js`], `lint:eslint`);
 
     if (this.config.get(`project.eslint.imports`)) {
       this.extend({exclusive: true}, `@ianwremmel/eslint-config/es2015-imports`);
@@ -55,41 +58,5 @@ export default class ESLint extends ConfigFile {
     if (this.config.get(`project.react`)) {
       this.extend(`@ianwremmel/eslint-config/react`);
     }
-  }
-
-  @override
-  prompt() {
-    return [
-      {
-        default: true,
-        message: `Is this a JavaScript project?`,
-        name: `project.js`,
-        type: `confirm`,
-        when: (answers) => {
-          this.config.merge(answers);
-          return !this.config.has(`project.js`);
-        }
-      },
-      {
-        default: false,
-        message: `Is this a React project?`,
-        name: `project.react`,
-        type: `confirm`,
-        when: (answers) => {
-          this.config.merge(answers);
-          return !this.config.has(`project.react`) && this.config.get(`project.js`);
-        }
-      },
-      {
-        default: false,
-        message: `Does this project use es6 imports?`,
-        name: `project.eslint.imports`,
-        type: `confirm`,
-        when: (answers) => {
-          this.config.merge(answers);
-          return !this.config.has(`project.eslint.imports`) && this.config.get(`project.js`);
-        }
-      }
-    ];
   }
 }

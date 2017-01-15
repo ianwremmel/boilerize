@@ -14,8 +14,9 @@ export default class Secrets {
 
   get(service, username) {
     if (this.keytar) {
-      this.keytar.getPassword(makeKey(service), username);
+      return this.keytar.getPassword(makeKey(service), username);
     }
+    return null;
   }
 
   set(service, username, password) {

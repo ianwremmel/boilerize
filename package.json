@@ -1,6 +1,6 @@
 {
   "name": "@ianwremmel/boilerize",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "boilerize applies common config to an existing JavaScript repo",
   "homepage": "https://github.com/ianwremmel/boilerize#readme",
   "bugs": {
@@ -21,7 +21,8 @@
     "lint:staged": "lint-staged",
     "lint:eslint": "eslint --ignore-path .gitignore",
     "lint:js": "npm run --silent lint:eslint -- .",
-    "lint": "npm run --silent lint:js"
+    "lint": "npm run --silent lint:js",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.19.0",
@@ -40,6 +41,7 @@
     "npm-registry-client": "^7.4.5",
     "rc": "^1.1.6",
     "request": "^2.79.0",
+    "request-promise": "^4.1.1",
     "request-promise-native": "^1.0.3",
     "require-dir": "^0.3.1",
     "string": "^3.3.3"
@@ -53,7 +55,11 @@
     "eslint-plugin-mocha": "^4.7.0",
     "eslint-plugin-react": "^6.8.0",
     "pre-commit": "^1.2.2",
-    "lint-staged": "^3.2.4"
+    "lint-staged": "^3.2.4",
+    "semantic-release": "^6.3.2"
+  },
+  "engines": {
+    "node": ">=4"
   },
   "lint-staged": {
     "*.js": "lint:eslint"

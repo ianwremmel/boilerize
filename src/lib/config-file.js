@@ -6,17 +6,13 @@ export default class ConfigFile {
     return Object.assign({}, this.data);
   }
 
-  constructor(config, dependencies) {
+  constructor(config, g) {
     if (!this.constructor.FILENAME) {
       throw new Error(`${this.constructor}.FILENAME is required`);
     }
 
     this.config = config;
-    if (dependencies) {
-      Object.keys(dependencies).forEach((key) => {
-        this[key] = dependencies[key];
-      });
-    }
+    this.g = g;
   }
 
   get(key) {
@@ -31,7 +27,7 @@ export default class ConfigFile {
     this.data = await load(this.constructor.FILENAME)();
   }
 
-  prompt() {
+  prompts() {
     return [];
   }
 

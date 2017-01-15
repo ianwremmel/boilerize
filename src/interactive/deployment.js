@@ -1,51 +1,47 @@
-export default class Deployment {
+import log from '../lib/decorators/log';
+import Service from '../lib/service';
+
+export default class Deployment extends Service {
+  @log()
   async configureBespoke() {
-    await this.package.addScript(`bespoke`, `echo "bespoke deployment script not configure"; exit 64`);
-    await this.circle.addDeployment({
-      branch: `master`,
-      script: `npm run bespoke`
-    });
-  }
-
-  async configureHeroku() {
-    throw new Error(`not implemented`);
-  }
-
-  async configureSemRel() {
-    await this.package.addDevDependency(`semantic-release`);
-    await this.package.addScript(`semantic-release`, `semantic-release pre && npm publish && semantic-release post`);
-    await this.circle.addDeployment({
-      branch: `master`,
-      script: `npm run semantic-release || true`
-    });
-    this.circle.setNodeVersion(this.package.get(`engines.node`));
-
-    await this.services.circle.follow();
-    await this.services.circle.addEnvironmentVariable({
-      name: `NPM_TOKEN`,
-      value: await this.services.npm.getToken()
-    });
-    await this.services.circle.addEnvironmentVariable({
-      name: `GITHUB_TOKEN`,
-      value: await this.services.github.getToken()
-    });
-    // TODO remember to protect branch from admins
-    // TODO remember to protected
-    await this.services.github.protectBranch(`master`, [`ci/circleci`]);
-    await this.package.setVersion(`0.0.0-development`);
-    console.info(`Project has been configured for semantic release. Publication will happen automatically once you publish 1.0.0`);
-  }
-
-  constructor(config, dependencies) {
-    this.config = config;
-    if (dependencies) {
-      Object.keys(dependencies).forEach((key) => {
-        this[key] = dependencies[key];
+    await this.g.config.package.addScript(`bespoke`, `echo "bespoke deployment script not configure"; exit 64`);
+    if (this.config.get(`deployment.platform`) === `circle`) {
+      await this.g.config.circle.addDeployment({
+        branch: `master`,
+        script: `npm run bespoke`
       });
     }
   }
 
-  prompt() {
+  @log()
+  async configureHeroku() {
+    throw new Error(`not implemented`);
+  }
+
+  @log()
+  async configureSemRel() {
+    await this.g.config.package.addDevDependency(`semantic-release`);
+    await this.g.config.package.addScript(`semantic-release`, `semantic-release pre && npm publish && semantic-release post`);
+    await this.g.config.circle.addDeployment({
+      branch: `master`,
+      name: `semantic-release`,
+      script: `npm run semantic-release || true`
+    });
+
+    await this.g.services.circle.follow();
+    await this.g.services.circle.addEnvironmentVariable({
+      name: `NPM_TOKEN`,
+      value: await this.g.services.npm.getToken()
+    });
+    await this.g.services.circle.addEnvironmentVariable({
+      name: `GITHUB_TOKEN`,
+      value: await this.g.services.github.getToken()
+    });
+    await this.g.config.package.setVersion(`0.0.0-development`);
+    console.info(`Project has been configured for semantic release. Publication will happen automatically once you publish 1.0.0`);
+  }
+
+  prompts() {
     return [
       {
         message: `Deployment type`,
@@ -56,9 +52,7 @@ export default class Deployment {
           {value: `heroku`, name: `Heroku`},
           {value: `bespoke`, name: `Bespoke`}
         ],
-        when() {
-          return !this.config.has(`deployment.type`);
-        }
+        when: () => !this.config.has(`deployment.type`)
       },
       {
         message: `Platform`,
@@ -67,12 +61,23 @@ export default class Deployment {
         choices: [
           {value: `circle`, name: `Circle CI`},
           {value: `none`, name: `None`}
-        ]
+        ],
+        when: (answers) => {
+          this.config.merge(answers);
+          return !this.config.has(`deployment.platform`);
+        }
       }
     ];
   }
 
+  @log()
+  // eslint-disable-next-line complexity
   async setup() {
+    if (this.config.get(`deployment.platform`) !== `circle` && this.config.get(`deployment.type`) !== `bespoke`) {
+      console.warn(`At this time, only bespoke deployments are available for CI platforms other than Circle CI`);
+      return;
+    }
+
     switch (this.config.get(`deployment.type`)) {
     case `heroku`:
       await this.configureHeroku();
@@ -84,6 +89,18 @@ export default class Deployment {
       await this.configureBespoke();
       break;
     default:
+    }
+
+    if (this.config.get(`deployment.platform`) === `circle`) {
+      if (this.g.config.package.has(`engines.node`)) {
+        this.g.config.circle.setNodeVersion(this.g.config.package.get(`engines.node`));
+      }
+    }
+
+    if (this.config.get(`project.github`) === `circle`) {
+      // TODO protect master
+      // TODO remember to protect branch from admins
+      // await this.g.services.github.protectBranch(`master`, [`ci/circleci`]);
     }
   }
 }

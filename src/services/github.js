@@ -1,8 +1,9 @@
 import base32 from 'base32';
 import crypto from 'crypto';
+import GitHubApi from 'github';
 import inquirer from 'inquirer';
-import npm from 'npm';
-import request from '../request';
+import cache from '../lib/decorators/cache';
+import log from '../lib/decorators/log';
 import Service from '../lib/service';
 
 function randomId() {
@@ -10,74 +11,70 @@ function randomId() {
 }
 
 export default class Github extends Service {
-  // TODO use github module
+  // Long-term, this should accept scopes, secrets base key, note, note url, etc
+  // as parameters
+  @cache({secret: true, service: `github`, name: `automation.token`})
+  @log()
   async getToken() {
-    const answers = await inquirer.prompt([{
-      message: `What is your GitHub password?`,
-      name: `password`,
-      type: `password`,
-      validate(input) {
-        return !!input.length;
+    // Reminder: prompting here because we don't want to store the password in
+    // boilerizerc
+    const answers = await inquirer.prompt([
+      {
+        default: this.config.get(`github.org`),
+        message: `What GitHub user do you want to use for automation tasks?`,
+        name: `username`,
+        type: `input`,
+        validate: (input) => !!input.length,
+        when: () => !this.g.secrets.get(`github`, `automation.username`)
       },
-      when: (a) => !this.secrets.get(`github`, a.username)
-    }]);
-
-    answers.password = answers.password || this.secrets.get(`github`, answers.username);
-
-    const response = await request({
-      method: `POST`,
-      url: `https://api.github.com/authorizations`,
-      json: true,
-      auth: {
-        user: this.config.get(`github.username`),
-        pass: answers.password
-      },
-      headers: {
-        'User-Agent': `semantic-release`
-      },
-      body: {
-        scopes: [
-          `repo`,
-          `read:org`,
-          `user:email`,
-          `repo_deployment`,
-          `repo:status`,
-          `write:repo_hook`
-        ],
-        note: `semantic-release-${this.package.name}-${randomId()}`
+      {
+        message: `What is that password for that user?`,
+        name: `password`,
+        type: `password`,
+        validate: (input) => !!input.length,
+        when: () => !this.g.secrets.get(`github`, `automation.password`)
       }
+    ]);
+
+    answers.password = answers.password || this.g.secrets.get(`github`, `automation.password`);
+    answers.username = answers.username || this.g.secrets.get(`github`, `automation.username`);
+
+    if (!answers.password) {
+      throw new Error(`password`);
+    }
+
+    if (!answers.username) {
+      throw new Error(`username`);
+    }
+
+    const github = new GitHubApi({Promise});
+    github.authenticate({
+      type: `basic`,
+      username: answers.username,
+      password: answers.password
     });
 
-    if (response.statusCode === 201) {
-      this.token = response.body.token;
-      return this.token;
+    const {token} = await github.authorization.create({
+      scopes: [
+        `repo`,
+        `read:org`,
+        `user:email`,
+        `repo_deployment`,
+        `repo:status`,
+        `write:repo_hook`
+      ],
+      note: `semantic-release-${this.g.config.package.name}-${randomId()}`,
+        // eslint-disable-next-line camelcase
+      note_url: `https://github.com/ianwremmel/boilerize`
+    });
+
+    if (!token) {
+      throw new Error(`Failed to get GitHub token`);
     }
 
-    console.warn(response.body);
-    throw new Error(`Unexpected response from github api ${response.statusCode}`);
-  }
+    this.g.secrets.set(`npm`, `automation.username`, answers.username);
+    this.g.secrets.set(`npm`, `automation.passsword`, answers.password);
 
-  prompt() {
-    return [{
-      default: true,
-      message: `Is this project on GitHub?`,
-      name: `github.use`,
-      type: `confirm`,
-      when: () => !this.config.has(`github.use`)
-    },
-    {
-      default: npm.config.get(`username`),
-      message: `What is your GitHub username?`,
-      name: `github.org`,
-      type: `input`,
-      validate(input) {
-        return !!input.length;
-      },
-      when: (answers) => {
-        this.config.merge(answers);
-        return this.config.use(`github`) && !this.config.has(`github.username`);
-      }
-    }
-    ];
+    return token;
   }
 }

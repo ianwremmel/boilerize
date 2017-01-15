@@ -1,34 +1,39 @@
-import {template} from 'lodash/fp';
-import ConfigFile from '../lib/config-file';
-import S from 'string';
 import {override} from 'core-decorators';
 import {readFile} from 'fs-promise';
+import {template} from 'lodash/fp';
+import S from 'string';
+import ConfigFile from '../lib/config-file';
+import log from '../lib/decorators/log';
 
 export default class Readme extends ConfigFile {
   static FILENAME = `README.md`;
 
+  @log()
   Title() {
-    if (this.package.has(`title`)) {
-      return `# ${this.package.get(`title`)} _(${this.package.get(`name`)})_`;
+    if (this.g.config.package.has(`title`)) {
+      return `# ${this.g.config.package.get(`title`)} _(${this.g.config.package.get(`name`)})_`;
     }
 
-    return `# ${this.package.get(`name`)}`;
+    return `# ${this.g.config.package.get(`name`)}`;
   }
 
+  @log()
   Badges() {
     return this.config.get(`format-readme.badges`).reduce((acc, tpl) => {
       acc += `${template(tpl)(Object.assign({
-        pkg: this.package.clone()
+        pkg: this.g.config.package.clone()
       }, this.config.clone()))}\n`;
       return acc;
     }, `\n`);
   }
 
+  @log()
   // eslint-disable-next-line quotes
   'Short Description'() {
-    return `> ${this.package.get(`description`)}\n`;
+    return `> ${this.g.config.package.get(`description`)}\n`;
   }
 
+  @log()
   // eslint-disable-next-line quotes
   'Long Description'() {
     const ld = this.config.get(`format-readme.sections['Long Description']`);
@@ -38,6 +43,7 @@ export default class Readme extends ConfigFile {
     return ``;
   }
 
+  @log()
   // eslint-disable-next-line quotes
   'Table of Contents'() {
     let start = false;
@@ -52,6 +58,7 @@ export default class Readme extends ConfigFile {
     }, `\n## Table of Contents\n\n`);
   }
 
+  @log()
   async format() {
     const keys = [
       `github.org`,
@@ -74,7 +81,7 @@ export default class Readme extends ConfigFile {
         const text = this.config.get(`format-readme.sections.${key}`);
         if (text) {
           return `${acc}\n## ${key}\n\n${template(text)(Object.assign({
-            pkg: this.package.clone()
+            pkg: this.g.config.package.clone()
           }, this.config.clone()))}\n`;
         }
       }
@@ -94,11 +101,13 @@ export default class Readme extends ConfigFile {
   }
 
   @override
+  @log()
   async load() {
     this.data = await readFile(this.constructor.FILENAME);
   }
 
   @override
+  @log()
   async setup() {
     this.data = await this.format(this.data);
   }

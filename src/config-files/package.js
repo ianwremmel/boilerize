@@ -1,13 +1,14 @@
 import {exec} from 'child_process';
+import {override} from 'core-decorators';
 import {difference, isString, uniq} from 'lodash/fp';
 import ConfigFile from '../lib/config-file';
-import {install} from '../npm';
-import {override} from 'core-decorators';
-import {save} from '../fs';
+import log from '../lib/decorators/log';
+import {save} from '../lib/fs';
 
 export default class Package extends ConfigFile {
   static FILENAME = `package.json`;
 
+  @log()
   addDevDependency(dependency) {
     if (!dependency) {
       throw new Error(`dependency is required`);
@@ -30,6 +31,7 @@ export default class Package extends ConfigFile {
     });
   }
 
+  @log()
   addScript(options, name, script) {
     this.data.scripts = this.data.scripts || {};
     if (isString(options)) {
@@ -49,6 +51,7 @@ export default class Package extends ConfigFile {
     this.data.scripts[name] = script;
   }
 
+  @log()
   combineScripts(name, script) {
     let currentScript = this.data.scripts[name];
     if (currentScript) {
@@ -77,12 +80,14 @@ export default class Package extends ConfigFile {
 
   }
 
+  @log()
   async installIfNeeded() {
     if (this.installNeeded) {
-      await install();
+      await this.g.services.npm.install();
     }
   }
 
+  @log()
   async save() {
     const d = this.toJSON();
     if (d && Object.keys(d).length) {
@@ -91,6 +96,7 @@ export default class Package extends ConfigFile {
   }
 
   @override
+  @log()
   async setup() {
     this.data[`pre-commit`] = `lint:staged`;
 
@@ -103,6 +109,7 @@ export default class Package extends ConfigFile {
   }
 
   @override
+  @log()
   toJSON() {
     const fpDefaults = this.config.get(`format-package.defaults`);
     const fpOverrides = this.config.get(`format-package.overrides`);
