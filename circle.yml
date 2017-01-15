@@ -1,8 +1,8 @@
-deployments:
+machine:
+  node:
+    version: '4'
+deployment:
   semantic-release:
     branch: master
     commands:
       - npm run semantic-release || true
-machine:
-  node:
-    version: '4'

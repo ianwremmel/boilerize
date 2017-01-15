@@ -1,9 +1,10 @@
 import {exec} from 'child_process';
 import {override} from 'core-decorators';
-import {difference, isString, uniq} from 'lodash/fp';
+import {isString, uniq} from 'lodash/fp';
 import ConfigFile from '../lib/config-file';
 import log from '../lib/decorators/log';
 import {save} from '../lib/fs';
+import {sort} from '../lib/format-json';
 
 export default class Package extends ConfigFile {
   static FILENAME = `package.json`;
@@ -116,13 +117,6 @@ export default class Package extends ConfigFile {
     const fpOrder = this.config.get(`format-package.order`);
 
     const unsorted = Object.assign({}, fpDefaults, this.data, fpOverrides);
-    const unknownKeys = difference(Object.keys(unsorted), fpOrder).sort();
-
-    return unknownKeys.reduce(sorter, fpOrder.reduce(sorter, {}));
-
-    function sorter(acc, key) {
-      acc[key] = unsorted[key];
-      return acc;
-    }
+    return sort(fpOrder, unsorted);
   }
 }
