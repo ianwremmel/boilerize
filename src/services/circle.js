@@ -1,4 +1,4 @@
-import Service from '../service';
+import Service from '../lib/service';
 import request from '../request';
 
 export default class Circle extends Service {

@@ -1,4 +1,4 @@
-import Service from '../service';
+import Service from '../lib/service';
 import {spawn} from 'child_process';
 
 export default class NPM extends Service {

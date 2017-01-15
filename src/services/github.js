@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import inquirer from 'inquirer';
 import npm from 'npm';
 import request from '../request';
-import Service from '../service';
+import Service from '../lib/service';
 
 function randomId() {
   return base32.encode(crypto.randomBytes(4));

@@ -1,6 +1,6 @@
 import {exec} from 'child_process';
 import {difference, isString, uniq} from 'lodash/fp';
-import ConfigFile from '../config-file';
+import ConfigFile from '../lib/config-file';
 import {install} from '../npm';
 import {override} from 'core-decorators';
 import {save} from '../fs';

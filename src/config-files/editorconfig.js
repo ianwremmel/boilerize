@@ -1,5 +1,5 @@
 import {readFile, writeFile} from 'fs-promise';
-import ConfigFile from '../config-file';
+import ConfigFile from '../lib/config-file';
 import {override} from 'core-decorators';
 
 export default class EditorConfig extends ConfigFile {

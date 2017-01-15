@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import {isString, uniq} from 'lodash/fp';
-import ConfigFile from '../config-file';
+import ConfigFile from '../lib/config-file';
 import {override} from 'core-decorators';
 
 export default class ESLint extends ConfigFile {

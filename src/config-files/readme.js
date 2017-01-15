@@ -1,5 +1,5 @@
 import {template} from 'lodash/fp';
-import ConfigFile from '../config-file';
+import ConfigFile from '../lib/config-file';
 import S from 'string';
 import {override} from 'core-decorators';
 import {readFile} from 'fs-promise';

@@ -1,5 +1,5 @@
 import {uniq} from 'lodash/fp';
-import ConfigFile from '../config-file';
+import ConfigFile from '../lib/config-file';
 
 export default class Circle extends ConfigFile {
   static FILENAME = `circle.yml`;
