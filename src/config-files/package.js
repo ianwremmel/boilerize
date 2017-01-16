@@ -1,4 +1,4 @@
-import {exec} from 'child_process';
+import {exec, spawn} from 'child_process';
 import {override} from 'core-decorators';
 import {isString, uniq} from 'lodash/fp';
 import ConfigFile from '../lib/config-file';
@@ -85,6 +85,24 @@ export default class Package extends ConfigFile {
   async installIfNeeded() {
     if (this.installNeeded) {
       await this.g.services.npm.install();
+    }
+
+    if (this.config.get(`project.js`)) {
+      await new Promise((resolve, reject) => {
+        const child = spawn(`bash`, [
+          `-c`,
+          `export PKG=@ianwremmel/eslint-config; npm info "$PKG@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG@latest"`
+        ], {stdio: `inherit`});
+        child.on(`close`, (code) => {
+          if (code) {
+            const error = new Error(`Failed to install eslint-config peer dependencies ${code}`);
+            error.code = code;
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      });
     }
   }
 
