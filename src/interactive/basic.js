@@ -52,6 +52,18 @@ export default class Basic extends Service {
         this.config.merge(answers);
         return this.config.get(`project.github`) && !this.config.has(`github.org`);
       }
+    },
+    {
+      message: `What is the project's GitHub repo name?`,
+      name: `github.project`,
+      type: `input`,
+      validate(input) {
+        return !!input.length;
+      },
+      when: (answers) => {
+        this.config.merge(answers);
+        return this.config.get(`project.github`) && !this.config.has(`github.project`);
+      }
     }];
   }
 }

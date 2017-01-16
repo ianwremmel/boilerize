@@ -71,7 +71,9 @@ export default async function init() {
   await g.config.circle.setup();
   await g.config.editorconfig.setup();
   await g.config.eslint.setup();
-  await g.config.readme.setup();
+  if (!await exists(path.resolve(process.cwd(), `README.md`))) {
+    await g.config.readme.setup();
+  }
 
   await deployment.setup();
 

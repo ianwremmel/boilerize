@@ -24,7 +24,15 @@ export default class ConfigFile {
   }
 
   async load() {
-    this.data = await load(this.constructor.FILENAME)();
+    try {
+      this.data = await load(this.constructor.FILENAME)();
+    }
+    catch (err) {
+      if (err.code !== `ENOENT`) {
+        throw err;
+      }
+      this.data = {};
+    }
   }
 
   prompts() {

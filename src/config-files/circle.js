@@ -37,7 +37,8 @@ export default class Circle extends ConfigFile {
     version = version
       .replace(/>/g, ``)
       .replace(/\=/g, ``)
-      .replace(/\=/g, ``);
+      .replace(/\=/g, ``)
+      .replace(/\.x/g, ``);
     this.g.config.circle.set(`machine.node.version`, version);
   }
 
