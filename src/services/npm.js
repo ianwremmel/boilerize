@@ -47,7 +47,6 @@ export default class NPM extends Service {
     const token = await new Promise((resolve, reject) => {
       const client = new RegistryClient();
       const uri = url.resolve(answers.registry, `-/user/org.couchdb.user:${encodeURIComponent(this.g.secrets.get(`npm`, `username`))}`);
-      console.log(uri);
       const body = {
         _id: `org.couchdb.user:${answers.username}`,
         name: answers.username,
@@ -56,7 +55,6 @@ export default class NPM extends Service {
         roles: [],
         date: new Date().toISOString()
       };
-      console.log(uri);
 
       client.request(uri, {
         method: `PUT`,
@@ -83,8 +81,6 @@ export default class NPM extends Service {
 
   @log()
   async install() {
-    console.info(`init: installing new packages`);
-
     await new Promise((resolve, reject) => {
       const child = spawn(`npm`, [`install`], {stdio: `inherit`});
       child.on(`close`, (code) => {
@@ -97,7 +93,5 @@ export default class NPM extends Service {
         resolve();
       });
     });
-
-    console.info(`init: done installing new packages`);
   }
 }
