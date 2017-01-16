@@ -99,6 +99,8 @@ export default class Package extends ConfigFile {
   @override
   @log()
   async setup() {
+    this.addScript(`test`, `echo "Please specify a test script"`);
+    this.addScript(`posttest`, `npm run lint`);
     this.data[`pre-commit`] = `lint:staged`;
 
     await this.addScript(`lint:staged`, `lint-staged`, this.data);
