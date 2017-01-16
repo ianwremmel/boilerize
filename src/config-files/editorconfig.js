@@ -9,7 +9,15 @@ export default class EditorConfig extends ConfigFile {
   @override
   @log()
   async load() {
-    this.data = await readFile(this.constructor.FILENAME);
+    try {
+      this.data = await readFile(this.constructor.FILENAME);
+    }
+    catch (err) {
+      if (err.code !== `ENOENT`) {
+        throw err;
+      }
+      this.data = {};
+    }
   }
 
   @override
