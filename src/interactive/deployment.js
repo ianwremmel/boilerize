@@ -15,7 +15,21 @@ export default class Deployment extends Service {
 
   @log()
   async configureHeroku() {
-    throw new Error(`not implemented`);
+    this.g.config.circle.addDeployment({
+      branch: `master`,
+      name: `production`,
+      script: `
+set -e
+LAST_SHA=$(heroku config:get HEROKU_SLUG_COMMIT --app ${this.config.get(`heroku.appname`)})
+if [ "\${LAST_SHA}" != "\${CIRCLE_SHA1}" ]; then
+  cd "$HOME/nv-secrets"
+  npm run cli -- heroku --appname ${this.config.get(`heroku.appname`)}
+  git tag -f prod
+  git push -f origin prod:prod
+fi
+git push -f origin HEAD:tap
+`
+    });
   }
 
   @log()
@@ -67,6 +81,16 @@ export default class Deployment extends Service {
         when: (answers) => {
           this.config.merge(answers);
           return !this.config.has(`deployment.platform`);
+        }
+      },
+      {
+        message: `What is the Heroku App Name?`,
+        name: `heroku.appname`,
+        type: `input`,
+        validate: (input) => !!input.length,
+        when: (answers) => {
+          this.config.merge(answers);
+          return this.config.get(`deployment.type`) === `heroku`;
         }
       }
     ];
