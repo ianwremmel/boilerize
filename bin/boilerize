@@ -1,23 +1,14 @@
 #!/usr/bin/env node
 
-require(`babel-register`);
+/* eslint quotes: [2, single] */
 
-// TODO need to think about how config is loaded based on cwd vs --dir
+require('babel-register');
 
-const pkg = require(`../package`);
-const yargs = require(`yargs`);
+const boilerize = require('../src/boilerize').default;
 
-const argv = yargs
-  .fail((msg, error) => {
-    console.error(error.stack);
-  })
-  .option(`dir`, {
-    alias: `d`,
-    desc: `Specify the directory to boil`,
-    default: process.cwd(),
-    global: true
-  })
-  .commandDir(`../src/cli`)
-  .help()
-  .version(pkg.version)
-  .argv;
+boilerize()
+  .catch((reason) => {
+    console.error(reason);
+    // eslint-disable-next-line no-process-exit
+    process.exit(64);
+  });

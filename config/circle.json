@@ -1,0 +1,13 @@
+{
+  "order": [
+    "general",
+    "experimental",
+    "machine",
+    "checkout",
+    "dependencies",
+    "database",
+    "compile",
+    "test",
+    "deployment"
+  ]
+}

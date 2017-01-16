@@ -13,6 +13,13 @@
   "project": {
     "eslint": {
       "imports": "true"
-    }
+    },
+    "js": true,
+    "react": false,
+    "github": true
+  },
+  "deployment": {
+    "type": "semrel",
+    "platform": "circle"
   }
 }
