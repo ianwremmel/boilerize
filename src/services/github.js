@@ -130,10 +130,7 @@ export default class Github extends Service {
         contexts: checks
       },
       // eslint-disable-next-line camelcase
-      required_pull_request_reviews: {
-        // eslint-disable-next-line camelcase
-        include_admins: false
-      },
+      required_pull_request_reviews: null,
       restrictions: null
     });
 
