@@ -21,7 +21,9 @@ export default class Deployment extends Service {
   @log()
   async configureSemRel() {
     await this.g.config.package.addDevDependency(`semantic-release`);
+    await this.g.config.package.addDevDependency(`condition-circle`);
     await this.g.config.package.addScript(`semantic-release`, `semantic-release pre && npm publish && semantic-release post`);
+    this.g.config.package.set(`release.verifyConditions`, [`condition-circle`]);
     await this.g.config.circle.addDeployment({
       branch: `master`,
       name: `semantic-release`,
