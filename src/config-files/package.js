@@ -44,8 +44,8 @@ export default class Package extends ConfigFile {
 
     if (this.data.scripts[name] && this.data.scripts[name] !== script) {
       if (!options.force) {
-        console.error(`addScript: not overwriting script ${script}. Use options.force to continue`);
-        throw new Error(`addScript: not overwriting script ${script}. Use options.force to continue`);
+        console.warn(`addScript: not overwriting script ${script}. Use options.force to continue`);
+        return;
       }
       console.warn(`addScript: overwriting existing script ${name}`);
     }
