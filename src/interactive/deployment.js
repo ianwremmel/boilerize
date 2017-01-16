@@ -26,7 +26,7 @@ export default class Deployment extends Service {
     this.g.config.package.set(`release.verifyConditions`, [`condition-circle`]);
     await this.g.config.circle.addDeployment({
       branch: `master`,
-      name: `semantic-release`,
+      name: `production`,
       script: `npm run semantic-release || true`
     });
 
