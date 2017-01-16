@@ -1,6 +1,8 @@
 import npm from 'npm';
 import rc from 'rc';
 import requireDir from 'require-dir';
+import path from 'path';
+import {exists} from 'fs-promise';
 import CircleConfig from './config-files/circle';
 import EditorConfig from './config-files/editorconfig';
 import ESLintConfig from './config-files/eslint';
@@ -15,6 +17,7 @@ import GithubService from './services/github';
 import NpmService from './services/npm';
 
 
+// eslint-disable-next-line max-statements
 export default async function init() {
   await new Promise((resolve, reject) => {
     npm.load((err) => {
@@ -78,9 +81,12 @@ export default async function init() {
     g.config.circle.save(),
     g.config.editorconfig.save(),
     g.config.eslint.save(),
-    g.config.package.save(),
-    g.config.readme.save()
+    g.config.package.save()
   ]);
+
+  if (!await exists(path.resolve(process.cwd(), `README.md`))) {
+    await g.config.readme.save();
+  }
 
   await g.config.package.installIfNeeded();
 }
