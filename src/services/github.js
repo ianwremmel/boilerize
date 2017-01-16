@@ -72,9 +72,72 @@ export default class Github extends Service {
       throw new Error(`Failed to get GitHub token`);
     }
 
-    this.g.secrets.set(`npm`, `automation.username`, answers.username);
-    this.g.secrets.set(`npm`, `automation.passsword`, answers.password);
+    this.g.secrets.set(`github`, `automation.username`, answers.username);
+    this.g.secrets.set(`github`, `automation.passsword`, answers.password);
 
     return token;
+  }
+
+  @log()
+  async protectBranch(branch, checks) {
+    // Reminder: prompting here because we don't want to store the password in
+    // boilerizerc
+    const answers = await inquirer.prompt([
+      {
+        default: this.config.get(`github.org`),
+        message: `What is your Github username?`,
+        name: `username`,
+        type: `input`,
+        validate: (input) => !!input.length,
+        when: () => !this.g.secrets.get(`github`, `user.username`)
+      },
+      {
+        message: `What is your Github password?`,
+        name: `password`,
+        type: `password`,
+        validate: (input) => !!input.length,
+        when: () => !this.g.secrets.get(`github`, `user.password`)
+      }
+    ]);
+
+    answers.password = answers.password || this.g.secrets.get(`github`, `user.password`);
+    answers.username = answers.username || this.g.secrets.get(`github`, `user.username`);
+
+    if (!answers.password) {
+      throw new Error(`password`);
+    }
+
+    if (!answers.username) {
+      throw new Error(`username`);
+    }
+
+    const github = new GitHubApi({Promise});
+    github.authenticate({
+      type: `basic`,
+      username: answers.username,
+      password: answers.password
+    });
+
+    await github.repos.updateBranchProtection({
+      owner: this.config.get(`github.org`),
+      repo: this.config.get(`github.project`),
+      branch,
+      // eslint-disable-next-line camelcase
+      required_status_checks: {
+        // eslint-disable-next-line camelcase
+        include_admins: true,
+        strict: true,
+        contexts: checks
+      },
+      // eslint-disable-next-line camelcase
+      required_pull_request_reviews: {
+        // eslint-disable-next-line camelcase
+        include_admins: false
+      },
+      restrictions: null
+    });
+
+    this.g.secrets.set(`github`, `user.username`, answers.username);
+    this.g.secrets.set(`github`, `user.passsword`, answers.password);
   }
 }

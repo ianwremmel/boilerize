@@ -97,10 +97,8 @@ export default class Deployment extends Service {
       }
     }
 
-    if (this.config.get(`project.github`) === `circle`) {
-      // TODO protect master
-      // TODO remember to protect branch from admins
-      // await this.g.services.github.protectBranch(`master`, [`ci/circleci`]);
+    if (this.config.get(`project.github`)) {
+      this.g.services.github.protectBranch(`master`, [`ci/circleci`]);
     }
   }
 }
