@@ -23,6 +23,19 @@ export default class Circle extends ConfigFile {
     this.data.deployment = deployment;
   }
 
+  @log()
+  async addScript(phase, hook, script) {
+    if (!script) {
+      script = hook;
+      hook = `override`;
+    }
+
+    this.data[phase] = this.data[phase] || {};
+    const data = this.data[phase][hook] || [];
+    data.push(script);
+    this.data[phase][hook] = uniq(data);
+  }
+
   @override
   @log()
   async save() {

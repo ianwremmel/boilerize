@@ -30,6 +30,9 @@ fi
 git push -f origin HEAD:tap
 `
     });
+
+    await this.g.config.package.addScript(`heroku-prebuild`, `echo '//registry.npmjs.org/:_authToken=\${NPM_TOKEN}' > ./.npmrc`);
+    await this.g.config.circle.addScript(`dependencies`, `pre`, `echo '//registry.npmjs.org/:_authToken=\${NPM_TOKEN}' > ./.npmrc`);
   }
 
   @log()

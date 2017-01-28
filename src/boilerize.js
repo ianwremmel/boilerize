@@ -39,13 +39,13 @@ export default async function init() {
   g.config.package = new PackageConfig(config, g);
   g.config.circle = new CircleConfig(config, g);
   g.config.editorconfig = new EditorConfig(config, g);
-  g.config.readme = new ReadmeConfig(config, g);
+  // g.config.readme = new ReadmeConfig(config, g);
 
   await Promise.all([
     g.config.circle.load(),
     g.config.editorconfig.load(),
-    g.config.package.load(),
-    g.config.readme.load()
+    g.config.package.load()
+    // g.config.readme.load()
   ]);
 
   const basic = new Basic(config, g);
@@ -71,9 +71,9 @@ export default async function init() {
   await g.config.circle.setup();
   await g.config.editorconfig.setup();
   await g.config.eslint.setup();
-  if (!await exists(path.resolve(process.cwd(), `README.md`))) {
-    await g.config.readme.setup();
-  }
+  // if (!await exists(path.resolve(process.cwd(), `README.md`))) {
+  //   await g.config.readme.setup();
+  // }
 
   await deployment.setup();
 
@@ -86,9 +86,9 @@ export default async function init() {
     g.config.package.save()
   ]);
 
-  if (!await exists(path.resolve(process.cwd(), `README.md`))) {
-    await g.config.readme.save();
-  }
+  // if (!await exists(path.resolve(process.cwd(), `README.md`))) {
+  //   await g.config.readme.save();
+  // }
 
   await g.config.package.installIfNeeded();
 }

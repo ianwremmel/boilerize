@@ -14,7 +14,7 @@ export default class Package extends ConfigFile {
     if (!dependency) {
       throw new Error(`dependency is required`);
     }
-
+    this.data.devDependencies = this.data.devDependencies || {};
     if (this.data.devDependencies[dependency]) {
       return Promise.resolve();
     }

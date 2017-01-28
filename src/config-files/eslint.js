@@ -42,7 +42,7 @@ export default class ESLint extends ConfigFile {
     await this.g.config.package.addDevDependency(`eslint`);
     await this.g.config.package.addDevDependency(`@ianwremmel/eslint-config`);
 
-    await this.g.config.package.addScript(`lint:eslint`, `eslint $([ -n "$CI" ] && echo '--format=junit --output-file=\${CIRCLE_TEST_REPORTS}/eslint.xml' || true) --ignore-path .gitignore`);
+    await this.g.config.package.addScript(`lint:eslint`, `eslint --ignore-path .gitignore`);
     await this.g.config.package.addScript(`lint:js`, `npm run --silent lint:eslint -- .`);
     await this.g.config.package.combineScripts(`lint`, `lint:js`);
 
