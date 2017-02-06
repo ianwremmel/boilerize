@@ -71,7 +71,7 @@ export default class Package extends ConfigFile {
 
     for (const s of currentScript) {
       if (!this.data.scripts[s]) {
-        throw new Error(`package: attempted to add unknown script ${s} to ${name}`);
+        // throw new Error(`package: attempted to add unknown script ${s} to ${name}`);
       }
     }
 

@@ -82,7 +82,7 @@ export default async function init() {
   await Promise.all([
     g.config.circle.save(),
     g.config.editorconfig.save(),
-    g.config.eslint.save(),
+    // g.config.eslint.save(),
     g.config.package.save()
   ]);
 
