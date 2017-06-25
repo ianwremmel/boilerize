@@ -9,18 +9,22 @@ export default class Circle extends ConfigFile {
   static FILENAME = `circle.yml`;
 
   @log()
-  async addDeployment({name, branch, script}) {
+  addDeployment({
+    name, branch, script
+  }) {
     const deployment = this.data.deployment || {};
     deployment[name] = deployment[name] || {
       branch,
       commands: []
     };
 
-    const commands = deployment[name].commands;
+    const {commands} = deployment[name];
     commands.push(script);
     deployment[name].commands = uniq(commands);
 
     this.data.deployment = deployment;
+
+    return Promise.resolve();
   }
 
   @override
@@ -36,8 +40,8 @@ export default class Circle extends ConfigFile {
   setNodeVersion(version) {
     version = version
       .replace(/>/g, ``)
-      .replace(/\=/g, ``)
-      .replace(/\=/g, ``)
+      .replace(/=/g, ``)
+      .replace(/=/g, ``)
       .replace(/\.x/g, ``);
     this.g.config.circle.set(`machine.node.version`, version);
   }
@@ -47,6 +51,7 @@ export default class Circle extends ConfigFile {
   toJSON() {
     const cOrder = this.config.get(`circle.order`);
     const unsorted = this.data;
+
     return sort(cOrder, unsorted);
   }
 }

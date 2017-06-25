@@ -11,6 +11,7 @@ export default class ESLint extends ConfigFile {
   extend(options, rule) {
     if (options.exclusive) {
       this.data.extends = rule;
+
       return;
     }
 
@@ -19,6 +20,7 @@ export default class ESLint extends ConfigFile {
         this.data.extends,
         rule
       ];
+
       return;
     }
 

@@ -20,9 +20,8 @@ export default class Readme extends ConfigFile {
   @log()
   Badges() {
     return this.config.get(`format-readme.badges`).reduce((acc, tpl) => {
-      acc += `${template(tpl)(Object.assign({
-        pkg: this.g.config.package.clone()
-      }, this.config.clone()))}\n`;
+      acc += `${template(tpl)(Object.assign({pkg: this.g.config.package.clone()}, this.config.clone()))}\n`;
+
       return acc;
     }, `\n`);
   }
@@ -40,6 +39,7 @@ export default class Readme extends ConfigFile {
     if (ld) {
       return `${ld}`;
     }
+
     return ``;
   }
 
@@ -47,13 +47,18 @@ export default class Readme extends ConfigFile {
   // eslint-disable-next-line quotes
   'Table of Contents'() {
     let start = false;
+
     return Reflect.apply(toOrder, this, [this.config]).reduce((acc, key) => {
       if (start) {
-        acc += `- [${key}](#${S(key).dasherize().chompLeft(`-`).s})\n`;
+        acc += `- [${key}](#${S(key)
+          .dasherize()
+          .chompLeft(`-`)
+          .s})\n`;
       }
       if (key === `Table of Contents`) {
         start = true;
       }
+
       return acc;
     }, `\n## Table of Contents\n\n`);
   }
@@ -80,9 +85,7 @@ export default class Readme extends ConfigFile {
       if (key !== `Long Description`) {
         const text = this.config.get(`format-readme.sections.${key}`);
         if (text) {
-          return `${acc}\n## ${key}\n\n${template(text)(Object.assign({
-            pkg: this.g.config.package.clone()
-          }, this.config.clone()))}\n`;
+          return `${acc}\n## ${key}\n\n${template(text)(Object.assign({pkg: this.g.config.package.clone()}, this.config.clone()))}\n`;
         }
       }
 
@@ -96,6 +99,7 @@ export default class Readme extends ConfigFile {
       else if (this.config.get(`format-readme.required`).includes(key)) {
         throw new Error(`format-readme. no text provided for section \`${key}\``);
       }
+
       return acc;
     }, ``);
   }
@@ -122,6 +126,7 @@ function toOrder(config) {
     if (config.get(`format-readme.required`).includes(key) || key in this || key in config.get(`format-readme.sections`)) {
       acc.push(key);
     }
+
     return acc;
   }, []);
 
@@ -130,6 +135,7 @@ function toOrder(config) {
     if (!acc.includes(key) && !config.get(`format-readme.order.end`).includes(key)) {
       acc.push(key);
     }
+
     return acc;
   }, order);
 
@@ -139,6 +145,7 @@ function toOrder(config) {
     if (key in this || key in config.get(`format-readme.sections`)) {
       acc.push(key);
     }
+
     return acc;
   }, order);
 

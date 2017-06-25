@@ -19,10 +19,12 @@ export default class Package extends ConfigFile {
       return Promise.resolve();
     }
     this.installNeeded = true;
+
     return new Promise((resolve, reject) => {
       exec(`npm view ${dependency}@latest version`, (err, stdout) => {
         if (err) {
           reject(err);
+
           return;
         }
         this.data.devDependencies = this.data.devDependencies || {};
@@ -45,6 +47,7 @@ export default class Package extends ConfigFile {
     if (this.data.scripts[name] && this.data.scripts[name] !== script) {
       if (!options.force) {
         console.warn(`addScript: not overwriting script ${script}. Use options.force to continue`);
+
         return;
       }
       console.warn(`addScript: overwriting existing script ${name}`);
@@ -91,6 +94,7 @@ export default class Package extends ConfigFile {
       await new Promise((resolve, reject) => {
         const child = spawn(`bash`, [
           `-c`,
+          // eslint-disable-next-line no-useless-escape
           `export PKG=@ianwremmel/eslint-config; npm info "$PKG@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "$PKG@latest"`
         ], {stdio: `inherit`});
         child.on(`close`, (code) => {
@@ -98,6 +102,7 @@ export default class Package extends ConfigFile {
             const error = new Error(`Failed to install eslint-config peer dependencies ${code}`);
             error.code = code;
             reject(error);
+
             return;
           }
           resolve();
@@ -137,6 +142,7 @@ export default class Package extends ConfigFile {
     const fpOrder = this.config.get(`format-package.order`);
 
     const unsorted = Object.assign({}, fpDefaults, this.data, fpOverrides);
+
     return sort(fpOrder, unsorted);
   }
 }

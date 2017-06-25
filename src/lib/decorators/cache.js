@@ -1,6 +1,8 @@
 import {wrap} from 'lodash/fp';
 
-export default function cache({secret, service, name}) {
+export default function cache({
+  secret, service, name
+}) {
   if (secret && !service) {
     throw new Error(`\`service\` must be supplied for caching secrets`);
   }

@@ -50,9 +50,18 @@ export default class Deployment extends Service {
         name: `deployment.type`,
         type: `list`,
         choices: [
-          {value: `semrel`, name: `Semantic Release`},
-          {value: `heroku`, name: `Heroku`},
-          {value: `bespoke`, name: `Bespoke`}
+          {
+            value: `semrel`,
+            name: `Semantic Release`
+          },
+          {
+            value: `heroku`,
+            name: `Heroku`
+          },
+          {
+            value: `bespoke`,
+            name: `Bespoke`
+          }
         ],
         when: () => !this.config.has(`deployment.type`)
       },
@@ -61,11 +70,18 @@ export default class Deployment extends Service {
         name: `deployment.platform`,
         type: `list`,
         choices: [
-          {value: `circle`, name: `Circle CI`},
-          {value: `none`, name: `None`}
+          {
+            value: `circle`,
+            name: `Circle CI`
+          },
+          {
+            value: `none`,
+            name: `None`
+          }
         ],
         when: (answers) => {
           this.config.merge(answers);
+
           return !this.config.has(`deployment.platform`);
         }
       }
@@ -77,20 +93,21 @@ export default class Deployment extends Service {
   async setup() {
     if (this.config.get(`deployment.platform`) !== `circle` && this.config.get(`deployment.type`) !== `bespoke`) {
       console.warn(`At this time, only bespoke deployments are available for CI platforms other than Circle CI`);
+
       return;
     }
 
     switch (this.config.get(`deployment.type`)) {
-    case `heroku`:
-      await this.configureHeroku();
-      break;
-    case `semrel`:
-      await this.configureSemRel();
-      break;
-    case `bespoke`:
-      await this.configureBespoke();
-      break;
-    default:
+      case `heroku`:
+        await this.configureHeroku();
+        break;
+      case `semrel`:
+        await this.configureSemRel();
+        break;
+      case `bespoke`:
+        await this.configureBespoke();
+        break;
+      default:
     }
 
     if (this.config.get(`deployment.platform`) === `circle`) {

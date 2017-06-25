@@ -25,11 +25,12 @@ export default function log(options) {
         logFailureAndRethrow(reason);
         throw new Error(`Unreachable code reached`);
       }
-        /* eslint-enable no-invalid-this */
+      /* eslint-enable no-invalid-this */
     }, descriptor.value);
 
     function logSuccessAndReturnResult(result) {
       console.info(options.success);
+
       return result;
     }
 

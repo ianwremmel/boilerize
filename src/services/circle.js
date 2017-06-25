@@ -5,7 +5,11 @@ import request from '../lib/request';
 import Service from '../lib/service';
 
 export default class Circle extends Service {
-  @cache({secret: true, service: `circleci`, name: `automation.token`})
+  @cache({
+    secret: true,
+    service: `circleci`,
+    name: `automation.token`
+  })
   @log()
   async getToken() {
     const {token} = await inquirer.prompt([{
@@ -14,6 +18,7 @@ export default class Circle extends Service {
       type: `password`,
       validate: (value) => !!value.length
     }]);
+
     return token;
   }
 
@@ -22,9 +27,7 @@ export default class Circle extends Service {
     await request({
       method: `POST`,
       uri: `https://circleci.com/api/v1.1/project/github/${this.config.get(`github.org`)}/${this.config.get(`github.project`)}/envvar`,
-      qs: {
-        'circle-token': await this.getToken()
-      },
+      qs: {'circle-token': await this.getToken()},
       body: {
         name,
         value
@@ -37,9 +40,7 @@ export default class Circle extends Service {
     await request({
       method: `POST`,
       uri: `https://circleci.com/api/v1.1/project/github/${this.config.get(`github.org`)}/${this.config.get(`github.project`)}/follow`,
-      qs: {
-        'circle-token': await this.getToken()
-      }
+      qs: {'circle-token': await this.getToken()}
     });
   }
 }

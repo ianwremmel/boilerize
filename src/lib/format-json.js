@@ -9,6 +9,7 @@ export function sort(order, obj) {
     if (obj[key]) {
       acc[key] = obj[key];
     }
+
     return acc;
   }
 }
