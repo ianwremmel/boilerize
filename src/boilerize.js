@@ -23,6 +23,7 @@ export default async function init() {
     npm.load((err) => {
       if (err) {
         reject(err);
+
         return;
       }
       resolve();

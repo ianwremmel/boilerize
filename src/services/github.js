@@ -13,7 +13,11 @@ function randomId() {
 export default class Github extends Service {
   // Long-term, this should accept scopes, secrets base key, note, note url, etc
   // as parameters
-  @cache({secret: true, service: `github`, name: `automation.token`})
+  @cache({
+    secret: true,
+    service: `github`,
+    name: `automation.token`
+  })
   @log()
   async getToken() {
     // Reminder: prompting here because we don't want to store the password in
@@ -64,7 +68,7 @@ export default class Github extends Service {
         `write:repo_hook`
       ],
       note: `semantic-release-${this.g.config.package.name}-${randomId()}`,
-        // eslint-disable-next-line camelcase
+      // eslint-disable-next-line camelcase
       note_url: `https://github.com/ianwremmel/boilerize`
     });
 

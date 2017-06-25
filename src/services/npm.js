@@ -8,7 +8,11 @@ import log from '../lib/decorators/log';
 import Service from '../lib/service';
 
 export default class NPM extends Service {
-  @cache({secret: true, service: `npm`, name: `automation.token`})
+  @cache({
+    secret: true,
+    service: `npm`,
+    name: `automation.token`
+  })
   @log()
   async getToken() {
     const answers = await inquirer.prompt([{
@@ -62,6 +66,7 @@ export default class NPM extends Service {
       }, (err, data) => {
         if (err) {
           reject(err);
+
           return;
         }
 
@@ -88,6 +93,7 @@ export default class NPM extends Service {
           const error = new Error(`npm install failed with code ${code}`);
           error.code = code;
           reject(error);
+
           return;
         }
         resolve();

@@ -10,6 +10,7 @@ import {resolve} from 'path';
 export function exists(filename) {
   return async function curriedExists() {
     const filePath = resolve(process.cwd(), filename);
+
     return await fsExists(filePath);
   };
 }
@@ -29,6 +30,7 @@ export function load(filename) {
         }
         catch (err2) {
           console.warn(`Failed to parse ${filePath} as JSON or YAML. Did you mean to use fs.readFile?`);
+
           return raw;
         }
       }
@@ -39,21 +41,21 @@ export function load(filename) {
   };
 }
 
-export const save = curry(async (filename, data) => {
+export const save = curry(async(filename, data) => {
   const filePath = resolve(process.cwd(), filename);
   switch (filePath.split(`.`).pop()) {
-  case `json`:
-    await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
-    break;
-  case `md`:
-    await writeFile(filePath, data);
-    break;
-  case `yaml`:
-  case `yml`:
-    await writeFile(filePath, jsyaml.safeDump(data));
-    break;
-  default:
-    console.warn(`Could not determine output type for ${filePath}. Did you mean to use fs.writeFile?`);
-    await writeFile(filePath, data);
+    case `json`:
+      await writeFile(filePath, `${JSON.stringify(data, null, 2)}\n`);
+      break;
+    case `md`:
+      await writeFile(filePath, data);
+      break;
+    case `yaml`:
+    case `yml`:
+      await writeFile(filePath, jsyaml.safeDump(data));
+      break;
+    default:
+      console.warn(`Could not determine output type for ${filePath}. Did you mean to use fs.writeFile?`);
+      await writeFile(filePath, data);
   }
 });

@@ -39,6 +39,7 @@ export default class Config {
 
   async save() {
     const out = this.toString();
+
     return await writeFile(`.boilerizerc`, out);
   }
 
@@ -66,6 +67,7 @@ export default class Config {
         const val = this.get(key);
         acc = set(key, val, acc);
       }
+
       return acc;
     }, target);
   }

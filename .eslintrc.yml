@@ -1,5 +1,20 @@
-extends: '@ianwremmel/eslint-config/es2015-imports'
+env:
+  es6: true
+  node: true
+extends:
+  - "@ianwremmel"
+parser: "babel-eslint"
+parserOptions:
+  sourceType: "module"
 rules:
-  require-jsdoc: 0
-  no-console: 0
-  global-require: 0
+  require-jsdoc: "off"
+  no-console: "off"
+  global-require: "off"
+
+# Disabling these for the short term
+  sort-imports: "off"
+  sort-keys: "off"
+  no-param-reassign: "off"
+  no-div-regex: "off"
+  no-return-await: "off"
+  require-await: "off"

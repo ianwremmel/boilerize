@@ -10,6 +10,7 @@ export default class Basic extends Service {
       type: `confirm`,
       when: (answers) => {
         this.config.merge(answers);
+
         return !this.config.has(`project.js`);
       }
     }, {
@@ -19,6 +20,7 @@ export default class Basic extends Service {
       type: `confirm`,
       when: (answers) => {
         this.config.merge(answers);
+
         return !this.config.has(`project.react`) && this.config.get(`project.js`);
       }
     }, {
@@ -28,6 +30,7 @@ export default class Basic extends Service {
       type: `confirm`,
       when: (answers) => {
         this.config.merge(answers);
+
         return !this.config.has(`project.eslint.imports`) && this.config.get(`project.js`);
       }
     }, {
@@ -37,6 +40,7 @@ export default class Basic extends Service {
       type: `confirm`,
       when: (answers) => {
         this.config.merge(answers);
+
         return !this.config.has(`project.github`);
       }
     },
@@ -50,6 +54,7 @@ export default class Basic extends Service {
       },
       when: (answers) => {
         this.config.merge(answers);
+
         return this.config.get(`project.github`) && !this.config.has(`github.org`);
       }
     },
@@ -62,6 +67,7 @@ export default class Basic extends Service {
       },
       when: (answers) => {
         this.config.merge(answers);
+
         return this.config.get(`project.github`) && !this.config.has(`github.project`);
       }
     }];
