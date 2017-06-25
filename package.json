@@ -30,14 +30,14 @@
     "babel-preset-env": "^1.1.4",
     "babel-register": "^6.18.0",
     "base32": "0.0.6",
-    "core-decorators": "^0.17.0",
+    "core-decorators": "^0.19.0",
     "flat": "^2.0.1",
     "fs-promise": "^2.0.0",
     "github": "^9.0.0",
     "inquirer": "^3.0.1",
     "js-yaml": "^3.7.0",
-    "npm": "^4.1.1",
-    "npm-registry-client": "^7.4.5",
+    "npm": "^5.0.3",
+    "npm-registry-client": "^8.3.0",
     "rc": "^1.1.6",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
@@ -46,20 +46,20 @@
     "string": "^3.3.3"
   },
   "devDependencies": {
-    "@ianwremmel/eslint-config": "^1.2.1",
+    "@ianwremmel/eslint-config": "^2.0.1",
     "babel-eslint": "^7.1.1",
     "condition-circle": "^1.5.0",
-    "eslint": "^3.15.0",
+    "eslint": "^4.1.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-mocha": "^4.8.0",
-    "eslint-plugin-react": "^6.9.0",
-    "lint-staged": "^3.2.4",
+    "eslint-plugin-react": "^7.1.0",
+    "lint-staged": "^4.0.0",
     "pre-commit": "^1.2.2",
     "semantic-release": "^6.3.2"
   },
   "optionalDependencies": {
-    "keytar": "^3.0.2"
+    "keytar": "^4.0.3"
   },
   "engines": {
     "node": ">=4"
