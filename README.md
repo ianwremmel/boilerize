@@ -1,6 +1,6 @@
 # boilerize _(@ianwremmel/boilerize)_
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/ianwremmel/boilerize.svg)](https://greenkeeper.io/)
+[![Dependabot badge](https://img.shields.io/badge/Dependabot-active-brightgreen.svg)](https://dependabot.com/)
 
 [![CircleCI](https://img.shields.io/circleci/project/github/ianwremmel/boilerize.svg?style=flat-square)](https://circleci.com/gh/ianwremmel/boilerize)
 [![Codacy grade](https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg?style=flat-square)](https://www.codacy.com/app/design_2/eslint-config?utm_source=github.com&utm_medium=referral&utm_content=ianwremmel/boilerize&utm_campaign=badger)
