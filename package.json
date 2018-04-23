@@ -31,7 +31,7 @@
     "babel-register": "^6.18.0",
     "base32": "0.0.6",
     "core-decorators": "^0.20.0",
-    "flat": "^2.0.1",
+    "flat": "^4.0.0",
     "fs-promise": "^2.0.0",
     "github": "^14.0.0",
     "inquirer": "^3.0.1",
