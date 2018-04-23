@@ -59,7 +59,7 @@
     "semantic-release": "^15.1.7"
   },
   "optionalDependencies": {
-    "keytar": "^3.0.2"
+    "keytar": "^4.2.1"
   },
   "engines": {
     "node": ">=4"
